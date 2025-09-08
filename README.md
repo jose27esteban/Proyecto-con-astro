@@ -12,8 +12,6 @@ npm create astro@latest -- --template minimal
 
 [![Ver Demo](https://img.shields.io/badge/🚀_Ver_Demo-Live_Site-blue?style=for-the-badge&logo=netlify)](https://68bdfa94d24ad998994fdd69--pokemon-astro-1.netlify.app/)
 
-[![Ver en Netlify](https://img.shields.io/badge/📊_Dashboard-Netlify-00C7B7?style=for-the-badge&logo=netlify)](https://app.netlify.com/projects/pokemon-astro-1/deploys/68bdfa94d24ad998994fdd69)
-
 </div>
 
 
