@@ -9,8 +9,11 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/solid-js": "^5.1.0",
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.13.5",
+    "astro-icon": "^1.1.5",
+    "solid-js": "^1.9.9",
     "tailwindcss": "^4.1.13"
   }
 }

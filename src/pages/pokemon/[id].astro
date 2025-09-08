@@ -6,7 +6,7 @@ import MainLayout from "@layouts/MainLayout.astro";
 import PokemonCard from "@components/pokemons/PokemonCard.astro";
 
 export const getStaticPaths = (async () => {
-    const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+    const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=15");
     const { results } = (await resp.json()) as PokemonListResponse;
 
     return results.map(({ name, url }) => {
@@ -28,9 +28,9 @@ const BASE_URL_AUDIO = `https://raw.githubusercontent.com/PokeAPI/cries/main/cri
     description=`Detalles del pokémon ${name}`
 >
     <section class="container mx-auto">
-        <a href=`/pokemons/1` class="text-blue-500 hover:underline"
-            >Volver al listado
-        </a>
+        <button onclick="history.back()" class="text-blue-500 hover:underline">
+            Volver
+        </button>
 
         <div class="flex items-center gap-4 mt-5">
             <span class="bg-amber-900 px-4 py-2 ms-6 font-bold mt-2">{id}</span>

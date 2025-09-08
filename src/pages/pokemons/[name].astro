@@ -1,12 +1,16 @@
 ---
 import type { GetStaticPaths } from "astro";
 import type { PokemonListResponse } from "@interfaces/pokemon-list-response";
+import { Icon } from "astro-icon/components";
 
 import MainLayout from "@layouts/MainLayout.astro";
 import PokemonCard from "@components/pokemons/PokemonCard.astro";
+import { LIMITE_POKEMONS } from "src/global/limits";
 
 export const getStaticPaths = (async () => {
-    const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+    const resp = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=${LIMITE_POKEMONS}`,
+    );
     const { results } = (await resp.json()) as PokemonListResponse;
 
     return results.map(({ name, url }) => ({
@@ -28,15 +32,39 @@ const BASE_URL_IMAGE = `https://raw.githubusercontent.com/PokeAPI/sprites/master
     image={BASE_URL_IMAGE}
 >
     <section class="container mx-auto">
-        <a href="/pokemons/1" class="text-blue-500 hover:underline"
-            >Volver al listado
-        </a>
+        <button onclick="history.back()" class="text-blue-500 hover:underline">
+            Volver
+        </button>
 
-        <div class="flex items-center gap-4 mt-5">
-            <span class="bg-amber-900 px-4 py-2 ms-6 font-bold mt-2">{id}</span>
-            <h1 class="text-5xl capitalize font-light flex-1">
-                Soy <span class="text-orange-600 font-semibold">{name}</span>
-            </h1>
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-4 mt-5">
+                <span class="bg-amber-900 px-4 py-2 ms-6 font-bold mt-2"
+                    >{id}</span
+                >
+                <h1 class="text-5xl capitalize font-light flex-1">
+                    Soy <span class="text-orange-600 font-semibold">{name}</span
+                    >
+                </h1>
+            </div>
+
+            <button
+                class="btn btn-outline btn-error me-10 md:me-36 hover:border-red-500 hover:animate-pulse"
+                id="btn-favorite"
+                aria-label="Agregar a favoritos"
+                data-id={id}
+                data-name={name}
+            >
+                <Icon
+                    data-outline
+                    name="heart-outline"
+                    class="size-16 text-red-500"
+                />
+                <Icon
+                    data-full
+                    name="heart-full"
+                    class="size-16 text-red-500 hidden"
+                />
+            </button>
         </div>
 
         <div class="mt-5">
@@ -49,9 +77,75 @@ const BASE_URL_IMAGE = `https://raw.githubusercontent.com/PokeAPI/sprites/master
             <div class="w-full flex justify-center">
                 <audio controls class="w-72">
                     <source src={BASE_URL_AUDIO} type="audio/ogg" />
-                    Your browser does not support the audio element.
+                    Tu navegador no soporta el elemento de audio.
                 </audio>
             </div>
         </div>
     </section>
 </MainLayout>
+
+<script>
+    import type { FavoritePokemon } from "@interfaces/favorite-pokemon";
+
+    const getFavoritePokemons = (): FavoritePokemon[] => {
+        return JSON.parse(localStorage.getItem("favorites") || "[]");
+    };
+
+    const saveFavoritePokemons = (favorites: FavoritePokemon[]): void => {
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+    };
+
+    const isPokemonFavorite = (name: string): boolean => {
+        return getFavoritePokemons().some((pokemon) => pokemon.name === name);
+    };
+
+    const updateHeartIcon = (
+        heartFull: HTMLElement,
+        heartOutline: HTMLElement,
+        isFavorite: boolean,
+    ): void => {
+        if (isFavorite) {
+            heartFull.classList.remove("hidden");
+            heartOutline.classList.add("hidden");
+        } else {
+            heartFull.classList.add("hidden");
+            heartOutline.classList.remove("hidden");
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const btnFavorite = document.getElementById(
+            "btn-favorite",
+        ) as HTMLButtonElement;
+        if (!btnFavorite) return;
+
+        const { id = "", name = "" } = btnFavorite.dataset;
+        const heartFull = btnFavorite.querySelector(
+            "[data-full]",
+        ) as HTMLElement;
+        const heartOutline = btnFavorite.querySelector(
+            "[data-outline]",
+        ) as HTMLElement;
+
+        // Inicializar estado visual
+        updateHeartIcon(heartFull, heartOutline, isPokemonFavorite(name));
+
+        btnFavorite.addEventListener("click", () => {
+            let favoritePokemons = getFavoritePokemons();
+            const isFavorite = isPokemonFavorite(name);
+
+            if (isFavorite) {
+                // Esto crea un NUEVO array sin el pokémon actual
+                // NO modifica el array original, por eso necesitamos reasignar
+                favoritePokemons = favoritePokemons.filter(
+                    (pokemon) => pokemon.name !== name,
+                );
+            } else {
+                favoritePokemons.push({ id: +id, name });
+            }
+
+            saveFavoritePokemons(favoritePokemons);
+            updateHeartIcon(heartFull, heartOutline, !isFavorite);
+        });
+    });
+</script>

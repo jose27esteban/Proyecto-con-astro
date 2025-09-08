@@ -2,15 +2,17 @@
 import MainLayout from "@layouts/MainLayout.astro";
 import type { PokemonListResponse } from "@interfaces/pokemon-list-response";
 import PokemonCard from "@components/pokemons/PokemonCard.astro";
+import Title from "@components/shared/Title.astro";
+import { LIMITE_POKEMONS_LIST } from "src/global/limits";
 
-const resp = await fetch("https://pokeapi.co/api/v2/pokemon");
+const resp = await fetch(
+	`https://pokeapi.co/api/v2/pokemon?limit=${LIMITE_POKEMONS_LIST}`,
+);
 const pokemones = (await resp.json()) as PokemonListResponse;
 ---
 
 <MainLayout title="STBN | Pokemon" description="Esta es la pagina de Pokemon">
-	<h1 class="text-4xl text-orange-400 text-center font-bold">
-		Listado de Pokémons
-	</h1>
+	<Title title="Listado de pokemon" />
 
 	<section
 		aria-label="Listado de pokemons"

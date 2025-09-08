@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # local env files
 .vscode/
+
+src/components/Counter.tsx
+src/pages/islas/*

@@ -19,6 +19,8 @@
       "@layouts/*": [
         "./src/layout/*"
       ]
-    }
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   }
 }

@@ -1,0 +1,16 @@
+---
+import { FavoriteList } from "@components/pokemons/FavoritePokemons";
+import Title from "@components/shared/Title.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+---
+
+<MainLayout
+    title="STBN | Favoritos"
+    description="Esta es la pagina de Favoritos"
+>
+    <Title title="Pokémons Favoritos" />
+
+    <section>
+        <FavoriteList client:only="solid-js" />
+    </section>
+</MainLayout>

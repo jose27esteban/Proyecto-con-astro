@@ -4,9 +4,13 @@ import type { PokemonListResponse } from "@interfaces/pokemon-list-response";
 
 import MainLayout from "@layouts/MainLayout.astro";
 import PokemonCard from "@components/pokemons/PokemonCard.astro";
+import Title from "@components/shared/Title.astro";
+import { LIMITE_POKEMONS } from "src/global/limits";
 
 export const getStaticPaths = (async ({ paginate }) => {
-	const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+	const resp = await fetch(
+		`https://pokeapi.co/api/v2/pokemon?limit=${LIMITE_POKEMONS}`,
+	);
 	const { results } = (await resp.json()) as PokemonListResponse;
 
 	return paginate(results, { pageSize: 20 });
@@ -16,13 +20,11 @@ const { page } = Astro.props;
 ---
 
 <MainLayout title="STBN | Pokemon" description="Esta es la pagina de Pokemon">
-	<h1 class="text-4xl text-orange-400 text-center font-bold">
-		Listado de Pokémons
-	</h1>
+	<Title title="Listado de pokémons páginado" />
 
 	<section
 		aria-label="Listado de pokémons"
-		class="mt-4 mb-5 py-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+		class="mt-4 mb-5 py-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
 	>
 		{
 			page.data.map(({ name, url }) => (
