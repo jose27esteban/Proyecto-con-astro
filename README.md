@@ -10,7 +10,7 @@ npm create astro@latest -- --template minimal
 
 <div align="center">
 
-[![Ver Demo](https://img.shields.io/badge/🚀_Ver_Demo-Live_Site-blue?style=for-the-badge&logo=netlify)](https://68bdfa94d24ad998994fdd69--pokemon-astro-1.netlify.app/)
+[![Ver Demo](https://img.shields.io/badge/🚀_Ver_Demo-Live_Site-blue?style=for-the-badge&logo=netlify)](https://68c132c057b86a64a94c9067--pokemon-astro-1.netlify.app/)
 
 </div>
 
